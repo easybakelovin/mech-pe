@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pipe Head Loss</title>
+<style>
+:root { color-scheme: light; --ink:#18212f; --muted:#64748b; --blue:#2563eb; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background: radial-gradient(circle at 10% 0%, #e0f2fe 0, #f8fafc 34%, #eef2ff 100%); }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 44px; }
+.hero { display:flex; justify-content:space-between; gap:24px; align-items:flex-end; margin-bottom:22px; }
+h1 { margin:0 0 8px; font-size: clamp(2rem, 4vw, 3.4rem); line-height:1; letter-spacing:-0.04em; }
+p { color:var(--muted); line-height:1.55; margin:0; }
+.lesson-grid { display:grid; grid-template-columns: 360px minmax(0, 1fr); gap:20px; align-items:start; }
+.panel, .stage { background:rgba(255,255,255,.82); border:1px solid rgba(148,163,184,.35); box-shadow: 0 20px 60px rgba(15,23,42,.10); border-radius:24px; padding:20px; backdrop-filter: blur(14px); }
+.control { margin: 0 0 18px; }
+.control label { display:flex; justify-content:space-between; gap:12px; font-weight:700; font-size:.94rem; margin-bottom:8px; }
+.control output { color:var(--blue); font-variant-numeric: tabular-nums; }
+input[type=range] { width:100%; accent-color: var(--blue); }
+.kpis { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:18px; }
+.kpi { padding:14px; border-radius:18px; background:#f8fafc; border:1px solid #e2e8f0; }
+.kpi strong { display:block; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+.kpi span { display:block; margin-top:6px; font-size:1.35rem; font-weight:800; font-variant-numeric: tabular-nums; }
+.note { margin-top:16px; padding:14px; border-radius:18px; background:#eff6ff; border:1px solid #bfdbfe; font-size:.95rem; color:#334155; }
+svg { width:100%; height:auto; display:block; overflow:visible; }
+.equation { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#334155; }
+.flow-dot { animation: dash 1.5s linear infinite; }
+@keyframes dash { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+@media (max-width: 900px) { .lesson-grid { grid-template-columns: 1fr; } .hero { display:block; } }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div><h1>Pipe Head Loss</h1><p>Adjust pipe and flow inputs to connect Darcy-Weisbach math to velocity, turbulence, and pressure drop.</p></div>
+    <p class="equation">Thermal &amp; Fluids PE interactive SVG lesson</p>
+  </section>
+  <section class="lesson-grid">
+    <aside class="panel">
+<div class="control"><label>Flow rate Q <output id="qOut"></output></label><input id="q" type="range" min="0.01" max="0.20" step="0.005" value="0.08"></div>
+<div class="control"><label>Pipe diameter D <output id="dOut"></output></label><input id="d" type="range" min="0.05" max="0.35" step="0.005" value="0.15"></div>
+<div class="control"><label>Pipe length L <output id="lOut"></output></label><input id="l" type="range" min="10" max="200" step="5" value="80"></div>
+<div class="control"><label>Friction factor f <output id="fOut"></output></label><input id="f" type="range" min="0.008" max="0.06" step="0.001" value="0.025"></div>
+<div class="kpis"><div class="kpi"><strong>Velocity</strong><span id="vKpi"></span></div><div class="kpi"><strong>Reynolds No.</strong><span id="reKpi"></span></div><div class="kpi"><strong>Head loss</strong><span id="hKpi"></span></div><div class="kpi"><strong>Δp</strong><span id="dpKpi"></span></div></div>
+<p class="note"><span class="equation">h_f = f(L/D)(V²/2g)</span>. Higher flow and smaller diameters rapidly increase velocity head.</p>
+</aside>
+    <article class="stage">
+<svg viewBox="0 0 780 480" role="img" aria-label="Water pipe with animated flow and pressure drop gauges">
+  <defs><linearGradient id="pipeGrad" x1="0" x2="1"><stop offset="0" stop-color="#38bdf8"/><stop id="pipeHot" offset="1" stop-color="#2563eb"/></linearGradient><marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#0f172a"/></marker></defs>
+  <rect x="56" y="176" width="668" height="128" rx="64" fill="url(#pipeGrad)" stroke="#0f172a" stroke-width="4"/><rect x="74" y="199" width="632" height="82" rx="41" fill="#e0f2fe" opacity=".45"/>
+  <path id="flowPath" d="M120 240 H660" stroke="#075985" stroke-width="18" stroke-linecap="round" stroke-dasharray="34 46" class="flow-dot" opacity=".78"/>
+  <path d="M112 122 H300" stroke="#0f172a" stroke-width="5" marker-end="url(#arrow)"/><text x="116" y="104" font-size="22" font-weight="800">flow accelerates</text>
+  <g transform="translate(96 340)"><circle r="54" fill="#fff" stroke="#0f172a" stroke-width="4"/><path id="p1Needle" d="M0 0 L0 -38" stroke="#16a34a" stroke-width="5" stroke-linecap="round"/><text x="-34" y="84" font-size="18" font-weight="800">upstream</text></g>
+  <g transform="translate(684 340)"><circle r="54" fill="#fff" stroke="#0f172a" stroke-width="4"/><path id="p2Needle" d="M0 0 L0 -38" stroke="#ef4444" stroke-width="5" stroke-linecap="round"/><text x="-48" y="84" font-size="18" font-weight="800">downstream</text></g>
+  <path id="dropBar" d="M170 370 H610" stroke="#f97316" stroke-width="16" stroke-linecap="round" opacity=".25"/><text id="regime" x="390" y="398" text-anchor="middle" font-size="24" font-weight="900" fill="#0f172a"></text>
+</svg>
+</article>
+  </section>
+</main>
+<script>
+const g=9.80665, rho=998, mu=0.001002, $=id=>document.getElementById(id);
+function area(D){return Math.PI*D*D/4} function velocity(Q,A){return Q/A} function re(rho,V,D,mu){return rho*V*D/mu} function headLoss(f,L,D,V){return f*(L/D)*(V*V/(2*g))} function deltaP(rho,h){return rho*g*h}
+function fmt(n,d=2){return Number(n).toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d})}
+function update(){const Q=+$('q').value,D=+$('d').value,L=+$('l').value,f=+$('f').value,V=velocity(Q,area(D)),Re=re(rho,V,D,mu),h=headLoss(f,L,D,V),dp=deltaP(rho,h);$('qOut').value=fmt(Q,3)+' m³/s';$('dOut').value=fmt(D,3)+' m';$('lOut').value=fmt(L,0)+' m';$('fOut').value=fmt(f,3);$('vKpi').textContent=fmt(V)+' m/s';$('reKpi').textContent=fmt(Re,0);$('hKpi').textContent=fmt(h)+' m';$('dpKpi').textContent=fmt(dp/1000)+' kPa';const intensity=Math.min(1,h/80);$('pipeHot').setAttribute('stop-color',`rgb(${37+Math.round(210*intensity)}, ${99-Math.round(40*intensity)}, ${235-Math.round(190*intensity)})`);$('flowPath').style.animationDuration=Math.max(.25,2.2-V/4)+'s';$('flowPath').setAttribute('stroke-width',String(10+Math.min(18,V*3)));$('p1Needle').setAttribute('transform','rotate(-45)');$('p2Needle').setAttribute('transform',`rotate(${45+intensity*115})`);$('dropBar').setAttribute('opacity',.18+.65*intensity);$('regime').textContent=Re<2300?'Laminar range':(Re<4000?'Transitional range':'Turbulent range')}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update)); update();
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pump Curve Operating Point</title>
+<style>
+:root { color-scheme: light; --ink:#18212f; --muted:#64748b; --blue:#2563eb; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background: radial-gradient(circle at 10% 0%, #e0f2fe 0, #f8fafc 34%, #eef2ff 100%); }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 44px; }
+.hero { display:flex; justify-content:space-between; gap:24px; align-items:flex-end; margin-bottom:22px; }
+h1 { margin:0 0 8px; font-size: clamp(2rem, 4vw, 3.4rem); line-height:1; letter-spacing:-0.04em; }
+p { color:var(--muted); line-height:1.55; margin:0; }
+.lesson-grid { display:grid; grid-template-columns: 360px minmax(0, 1fr); gap:20px; align-items:start; }
+.panel, .stage { background:rgba(255,255,255,.82); border:1px solid rgba(148,163,184,.35); box-shadow: 0 20px 60px rgba(15,23,42,.10); border-radius:24px; padding:20px; backdrop-filter: blur(14px); }
+.control { margin: 0 0 18px; }
+.control label { display:flex; justify-content:space-between; gap:12px; font-weight:700; font-size:.94rem; margin-bottom:8px; }
+.control output { color:var(--blue); font-variant-numeric: tabular-nums; }
+input[type=range] { width:100%; accent-color: var(--blue); }
+.kpis { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:18px; }
+.kpi { padding:14px; border-radius:18px; background:#f8fafc; border:1px solid #e2e8f0; }
+.kpi strong { display:block; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+.kpi span { display:block; margin-top:6px; font-size:1.35rem; font-weight:800; font-variant-numeric: tabular-nums; }
+.note { margin-top:16px; padding:14px; border-radius:18px; background:#eff6ff; border:1px solid #bfdbfe; font-size:.95rem; color:#334155; }
+svg { width:100%; height:auto; display:block; overflow:visible; }
+.equation { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#334155; }
+.flow-dot { animation: dash 1.5s linear infinite; }
+@keyframes dash { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+@media (max-width: 900px) { .lesson-grid { grid-template-columns: 1fr; } .hero { display:block; } }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div><h1>Pump Curve Operating Point</h1><p>Move pump speed and system resistance to see where the pump curve intersects the piping system curve.</p></div>
+    <p class="equation">Thermal &amp; Fluids PE interactive SVG lesson</p>
+  </section>
+  <section class="lesson-grid">
+    <aside class="panel">
+<div class="control"><label>Pump speed <output id="speedOut"></output></label><input id="speed" type="range" min="60" max="120" step="1" value="100"></div>
+<div class="control"><label>System resistance K <output id="kOut"></output></label><input id="k" type="range" min="400" max="2600" step="25" value="1200"></div>
+<div class="kpis"><div class="kpi"><strong>Flow Q</strong><span id="qKpi"></span></div><div class="kpi"><strong>Head H</strong><span id="hKpi"></span></div><div class="kpi"><strong>Pump power</strong><span id="pKpi"></span></div><div class="kpi"><strong>Efficiency used</strong><span>72%</span></div></div>
+<p class="note">The operating point is the simultaneous solution of <span class="equation">H_pump(Q)</span> and <span class="equation">H_system(Q)</span>.</p>
+</aside>
+    <article class="stage">
+<svg viewBox="0 0 820 520" role="img" aria-label="Pump curve and system curve with animated operating point">
+  <defs><marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#0f172a"/></marker></defs>
+  <g transform="translate(50 52)"><circle cx="90" cy="105" r="56" fill="#dbeafe" stroke="#0f172a" stroke-width="4"/><path id="impeller" d="M90 105 C112 78 125 96 98 106 C77 132 60 114 84 104" fill="#2563eb" opacity=".85"/><path d="M145 105 H330" stroke="#38bdf8" stroke-width="34" stroke-linecap="round"/><path id="pumpFlow" d="M160 105 H320" stroke="#075985" stroke-width="8" stroke-dasharray="16 22" class="flow-dot" marker-end="url(#arrow2)"/><text x="18" y="195" font-size="20" font-weight="900">pump + pipe</text></g>
+  <g transform="translate(380 42)"><rect x="0" y="0" width="390" height="390" rx="22" fill="#fff" stroke="#cbd5e1"/><line x1="54" y1="330" x2="350" y2="330" stroke="#0f172a" stroke-width="3"/><line x1="54" y1="330" x2="54" y2="34" stroke="#0f172a" stroke-width="3"/><text x="202" y="372" text-anchor="middle" font-size="16" font-weight="800">flow rate Q (m³/s)</text><text x="16" y="190" transform="rotate(-90 16 190)" text-anchor="middle" font-size="16" font-weight="800">head H (m)</text><path id="pumpCurve" fill="none" stroke="#2563eb" stroke-width="5"/><path id="sysCurve" fill="none" stroke="#f97316" stroke-width="5"/><circle id="opPoint" r="9" fill="#16a34a" stroke="#052e16" stroke-width="3"/><text id="opLabel" x="0" y="0" font-size="16" font-weight="900" fill="#166534"></text><text x="245" y="68" fill="#2563eb" font-size="16" font-weight="900">pump curve</text><text x="214" y="306" fill="#f97316" font-size="16" font-weight="900">system curve</text></g>
+</svg>
+</article>
+  </section>
+</main>
+<script>
+const rho=998,g=9.80665,eta=.72,$=id=>document.getElementById(id),qMax=.24,hMax=95;
+function pumpHead(Q,s){const n=s/100;return Math.max(0,72*n*n-1050*Q*Q)} function sysHead(Q,k){return 6+k*Q*Q} function pumpPower(rho,Q,H,eta){return rho*g*Q*H/eta}
+function x(Q){return 434+Q/qMax*296} function y(H){return 372-H/hMax*296} function pathFor(fn){let d='';for(let i=0;i<=80;i++){const Q=qMax*i/80,H=fn(Q);d+=(i?'L':'M')+x(Q)+' '+y(H)+' '}return d} function solve(s,k){let lo=0,hi=qMax;for(let i=0;i<70;i++){let mid=(lo+hi)/2;if(pumpHead(mid,s)>sysHead(mid,k))lo=mid;else hi=mid}const Q=(lo+hi)/2;return {Q,H:sysHead(Q,k)}} function fmt(n,d=2){return Number(n).toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d})}
+function update(){const s=+$('speed').value,k=+$('k').value,op=solve(s,k);$('speedOut').value=s+'%';$('kOut').value=fmt(k,0);$('qKpi').textContent=fmt(op.Q,3)+' m³/s';$('hKpi').textContent=fmt(op.H)+' m';$('pKpi').textContent=fmt(pumpPower(rho,op.Q,op.H,eta)/1000)+' kW';$('pumpCurve').setAttribute('d',pathFor(Q=>pumpHead(Q,s)));$('sysCurve').setAttribute('d',pathFor(Q=>sysHead(Q,k)));$('opPoint').setAttribute('cx',x(op.Q));$('opPoint').setAttribute('cy',y(op.H));$('opLabel').setAttribute('x',x(op.Q)+14);$('opLabel').setAttribute('y',y(op.H)-12);$('opLabel').textContent='operating point';$('pumpFlow').style.animationDuration=Math.max(.25,1.8-op.Q*5)+'s';$('impeller').setAttribute('transform',`rotate(${(Date.now()/20*s)%360} 90 105)`)}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update)); setInterval(update,80); update();
+</script>
+</body>
+</html>

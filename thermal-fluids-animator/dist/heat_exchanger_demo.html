@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counterflow Heat Exchanger</title>
+<style>
+:root { color-scheme: light; --ink:#18212f; --muted:#64748b; --blue:#2563eb; }
+* { box-sizing: border-box; }
+body { margin:0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background: radial-gradient(circle at 10% 0%, #e0f2fe 0, #f8fafc 34%, #eef2ff 100%); }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 44px; }
+.hero { display:flex; justify-content:space-between; gap:24px; align-items:flex-end; margin-bottom:22px; }
+h1 { margin:0 0 8px; font-size: clamp(2rem, 4vw, 3.4rem); line-height:1; letter-spacing:-0.04em; }
+p { color:var(--muted); line-height:1.55; margin:0; }
+.lesson-grid { display:grid; grid-template-columns: 360px minmax(0, 1fr); gap:20px; align-items:start; }
+.panel, .stage { background:rgba(255,255,255,.82); border:1px solid rgba(148,163,184,.35); box-shadow: 0 20px 60px rgba(15,23,42,.10); border-radius:24px; padding:20px; backdrop-filter: blur(14px); }
+.control { margin: 0 0 18px; }
+.control label { display:flex; justify-content:space-between; gap:12px; font-weight:700; font-size:.94rem; margin-bottom:8px; }
+.control output { color:var(--blue); font-variant-numeric: tabular-nums; }
+input[type=range] { width:100%; accent-color: var(--blue); }
+.kpis { display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:18px; }
+.kpi { padding:14px; border-radius:18px; background:#f8fafc; border:1px solid #e2e8f0; }
+.kpi strong { display:block; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+.kpi span { display:block; margin-top:6px; font-size:1.35rem; font-weight:800; font-variant-numeric: tabular-nums; }
+.note { margin-top:16px; padding:14px; border-radius:18px; background:#eff6ff; border:1px solid #bfdbfe; font-size:.95rem; color:#334155; }
+svg { width:100%; height:auto; display:block; overflow:visible; }
+.equation { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; color:#334155; }
+.flow-dot { animation: dash 1.5s linear infinite; }
+@keyframes dash { from { stroke-dashoffset: 80; } to { stroke-dashoffset: 0; } }
+@media (max-width: 900px) { .lesson-grid { grid-template-columns: 1fr; } .hero { display:block; } }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <div><h1>Counterflow Heat Exchanger</h1><p>Explore energy balance and effectiveness by changing inlet temperatures, mass flow rates, and exchanger effectiveness.</p></div>
+    <p class="equation">Thermal &amp; Fluids PE interactive SVG lesson</p>
+  </section>
+  <section class="lesson-grid">
+    <aside class="panel">
+<div class="control"><label>Hot inlet temperature <output id="thOut"></output></label><input id="th" type="range" min="60" max="180" step="1" value="130"></div>
+<div class="control"><label>Cold inlet temperature <output id="tcOut"></output></label><input id="tc" type="range" min="5" max="55" step="1" value="25"></div>
+<div class="control"><label>Hot mass flow ṁh <output id="mhOut"></output></label><input id="mh" type="range" min="0.2" max="5" step="0.1" value="1.5"></div>
+<div class="control"><label>Cold mass flow ṁc <output id="mcOut"></output></label><input id="mc" type="range" min="0.2" max="5" step="0.1" value="2.0"></div>
+<div class="control"><label>Effectiveness ε <output id="epsOut"></output></label><input id="eps" type="range" min="0.10" max="0.95" step="0.01" value="0.70"></div>
+<div class="kpis"><div class="kpi"><strong>q̇</strong><span id="qKpi"></span></div><div class="kpi"><strong>Hot outlet</strong><span id="thoKpi"></span></div><div class="kpi"><strong>Cold outlet</strong><span id="tcoKpi"></span></div><div class="kpi"><strong>Cmin</strong><span id="cminKpi"></span></div></div>
+<p class="note"><span class="equation">q̇ = ε Cmin(Th,in − Tc,in)</span>, then outlet temperatures follow from each stream energy balance.</p>
+</aside>
+    <article class="stage">
+<svg viewBox="0 0 820 470" role="img" aria-label="Counterflow heat exchanger with hot and cold stream arrows">
+  <defs><marker id="hotArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ef4444"/></marker><marker id="coldArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker></defs>
+  <rect x="165" y="105" width="490" height="210" rx="34" fill="#f8fafc" stroke="#0f172a" stroke-width="4"/><path id="hotTube" d="M690 158 H130" stroke="#ef4444" stroke-width="44" stroke-linecap="round" marker-end="url(#hotArrow)"/><path id="coldTube" d="M130 262 H690" stroke="#2563eb" stroke-width="44" stroke-linecap="round" marker-end="url(#coldArrow)"/><path id="heatArrow" d="M410 175 V242" stroke="#f97316" stroke-width="14" stroke-linecap="round" marker-end="url(#hotArrow)" opacity=".7"/><path d="M640 80 C570 128 504 94 442 132 C365 180 286 126 192 154" fill="none" stroke="#f97316" stroke-width="4" stroke-dasharray="8 12" opacity=".7"/>
+  <text id="thi" x="672" y="115" text-anchor="middle" font-size="20" font-weight="900" fill="#991b1b"></text><text id="tho" x="134" y="115" text-anchor="middle" font-size="20" font-weight="900" fill="#991b1b"></text><text id="tci" x="130" y="340" text-anchor="middle" font-size="20" font-weight="900" fill="#1e3a8a"></text><text id="tco" x="690" y="340" text-anchor="middle" font-size="20" font-weight="900" fill="#1e3a8a"></text><text x="410" y="390" text-anchor="middle" font-size="24" font-weight="900">counterflow: hottest hot meets hottest cold</text><text id="qLabel" x="430" y="222" font-size="20" font-weight="900" fill="#9a3412"></text>
+</svg>
+</article>
+  </section>
+</main>
+<script>
+const cp=4186,$=id=>document.getElementById(id); function qDot(m,cp,dT){return m*cp*dT} function fmt(n,d=1){return Number(n).toLocaleString(undefined,{maximumFractionDigits:d,minimumFractionDigits:d})}
+function update(){const Thi=+$('th').value,Tci=+$('tc').value,mh=+$('mh').value,mc=+$('mc').value,eps=+$('eps').value,Ch=mh*cp,Cc=mc*cp,Cmin=Math.min(Ch,Cc),q=eps*Cmin*Math.max(0,Thi-Tci),Tho=Thi-q/Ch,Tco=Tci+q/Cc;$('thOut').value=fmt(Thi,0)+' °C';$('tcOut').value=fmt(Tci,0)+' °C';$('mhOut').value=fmt(mh,1)+' kg/s';$('mcOut').value=fmt(mc,1)+' kg/s';$('epsOut').value=fmt(eps,2);$('qKpi').textContent=fmt(q/1000,1)+' kW';$('thoKpi').textContent=fmt(Tho,1)+' °C';$('tcoKpi').textContent=fmt(Tco,1)+' °C';$('cminKpi').textContent=fmt(Cmin/1000,2)+' kW/K';$('thi').textContent='Th,in '+fmt(Thi,0)+'°C';$('tho').textContent='Th,out '+fmt(Tho,1)+'°C';$('tci').textContent='Tc,in '+fmt(Tci,0)+'°C';$('tco').textContent='Tc,out '+fmt(Tco,1)+'°C';$('qLabel').textContent=fmt(q/1000,0)+' kW';const heat=Math.min(1,q/500000);$('heatArrow').setAttribute('stroke-width',8+18*heat);$('heatArrow').setAttribute('opacity',.35+.6*heat);$('hotTube').setAttribute('opacity',.55+.45*(Thi/180));$('coldTube').setAttribute('opacity',.55+.45*(1-Tci/80))}
+document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update)); update();
+</script>
+</body>
+</html>
